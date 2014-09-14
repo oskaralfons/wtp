@@ -33,7 +33,7 @@ public class DEVerbWeakInseparableResolver {
         final String vp = props.getProperty("vp", "");
         final String zp = props.getProperty("zp", "");
         HashSet<String> vpZpYes = Sets.newHashSet("ja", "1", "sie_werden", "vp3", "zp3");
-        if (!"".equals(vp)) {
+        if (!vp.isEmpty()) {
             if (vpZpYes.contains(vp)) {
                 // Vorgangspassiv Infinitiv Präsens
                 infinitives.add(new WordForm(prefix + props.get("5")));
@@ -41,11 +41,13 @@ public class DEVerbWeakInseparableResolver {
                 infinitives.add(new WordForm(prefix + props.get("5")));
             }
         }
-        if (vpZpYes.contains(zp)) {
-            // Zustandspassiv Infinitiv Präsens
-            infinitives.add(new WordForm(prefix + props.get("5")));
-            // Zustandspassiv Infinitiv Perfekt
-            infinitives.add(new WordForm(prefix + props.get("5")));
+        if (!zp.isEmpty()) {
+            if (vpZpYes.contains(zp)) {
+                // Zustandspassiv Infinitiv Präsens
+                infinitives.add(new WordForm(prefix + props.get("5")));
+                // Zustandspassiv Infinitiv Perfekt
+                infinitives.add(new WordForm(prefix + props.get("5")));
+            }
         }
         return infinitives;
     }
@@ -54,14 +56,14 @@ public class DEVerbWeakInseparableResolver {
         final ArrayList<WordForm> infinitives = new ArrayList<>();
         String prefix = props.getProperty("1", "");
         String extPrefix = "";
-        if (!"".equals(prefix)) {
+        if (!prefix.isEmpty()) {
             extPrefix = (!"".equals(props.getProperty("Wv"))) ? prefix + "zu" : prefix + "zu ";
         }
         // erweiterte Infinitiv Präsens Aktiv
         String base;
         if (!"".equals(props.getProperty("Infinitiv Präsens", ""))) {
             base = props.getProperty("Infinitiv Präsens");
-        } else if (!"".equals(props.getProperty("10", ""))) {
+        } else if (!props.getProperty("10", "").isEmpty()) {
             base = props.getProperty("10");
         } else {
             base = props.getProperty("2") + "en";
@@ -69,7 +71,7 @@ public class DEVerbWeakInseparableResolver {
         infinitives.add(new WordForm(extPrefix + base));
         // erweiterter Infinitiv Perfekt aktiv
         infinitives.add(new WordForm(prefix + props.getProperty("5")));
-        if (!"".equals(props.getProperty("Partizip+", ""))) {
+        if (!props.getProperty("Partizip+", "").isEmpty()) {
             infinitives.add(new WordForm(prefix + props.getProperty("Partizip+")));
         }
 
@@ -77,7 +79,7 @@ public class DEVerbWeakInseparableResolver {
         final String vp = props.getProperty("vp", "");
         final String zp = props.getProperty("zp", "");
         HashSet<String> vpZpYes = Sets.newHashSet("ja", "1", "sie_werden", "vp3", "zp3");
-        if (!"".equals(vp)) {
+        if (!vp.isEmpty()) {
             if (vpZpYes.contains(vp)) {
                 // Vorgangspassiv Infinitiv Präsens
                 infinitives.add(new WordForm(prefix + props.get("5")));
@@ -85,14 +87,41 @@ public class DEVerbWeakInseparableResolver {
                 infinitives.add(new WordForm(prefix + props.get("5")));
             }
         }
-        if (vpZpYes.contains(zp)) {
-            // Zustandspassiv Infinitiv Präsens
-            infinitives.add(new WordForm(prefix + props.get("5")));
-            // Zustandspassiv Infinitiv Perfekt
-            infinitives.add(new WordForm(prefix + props.get("5")));
+        if (!zp.isEmpty()) {
+            if (vpZpYes.contains(zp)) {
+                // Zustandspassiv Infinitiv Präsens
+                infinitives.add(new WordForm(prefix + props.get("5")));
+                // Zustandspassiv Infinitiv Perfekt
+                infinitives.add(new WordForm(prefix + props.get("5")));
+            }
         }
 
         return infinitives;
+    }
+
+    public static Collection<WordForm> participles(final Properties props) {
+        final ArrayList<WordForm> participles = new ArrayList<>();
+        String prefix = props.getProperty("1", "");
+        // Präsens aktiv
+        participles.add(new WordForm(prefix + props.getProperty("2") + "end"));
+        // Perfekt Passiv
+        participles.add(new WordForm(prefix + props.getProperty("5")));
+        // Perfekt Passiv Partizip+
+        String partizipPlus = props.getProperty("Partizip+", "");
+        if (!partizipPlus.isEmpty()) {
+            participles.add(new WordForm(prefix + partizipPlus));
+        }
+        // Gerundivum
+        if (Sets.newHashSet("ja", "1").contains(props.getProperty("gerund", ""))) {
+            String extPrefix = "";
+            String base = props.getProperty("2");
+            if (!prefix.isEmpty()) {
+                extPrefix = (!"".equals(props.getProperty("Wv"))) ? prefix + "zu" : prefix + "zu ";
+            }
+            participles.add(new WordForm(extPrefix + base + "ender"));
+            participles.add(new WordForm(extPrefix + base + "ende"));
+        }
+        return participles;
     }
 
     public static String getBaseForm(final Properties props) {

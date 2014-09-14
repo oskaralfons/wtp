@@ -74,6 +74,19 @@ public class DEVerbWeakInseparableResolverTest {
         assertThat(wordFormToStrings(DEVerbWeakInseparableResolver.extendedInfinitives(antunProps)))
                 .isEqualTo(antunInfinitives);
     }
+    @Test
+    public void testParticiples() {
+        Set<String> kennenParticiples = Sets.newHashSet("kennend", "gekannt", "kennender", "kennende");
+        Set<String> seinParticiples = Sets.newHashSet("seiend", "gewesen");
+        Set<String> antunParticiples = Sets.newHashSet("antuend", "angetan", "anzutuender", "anzutuende");
+
+        assertThat(wordFormToStrings(DEVerbWeakInseparableResolver.participles(kennenProps)))
+                .isEqualTo(kennenParticiples);
+        assertThat(wordFormToStrings(DEVerbWeakInseparableResolver.participles(seinProps)))
+                .isEqualTo(seinParticiples);
+        assertThat(wordFormToStrings(DEVerbWeakInseparableResolver.participles(antunProps)))
+                .isEqualTo(antunParticiples);
+    }
 
 
 
