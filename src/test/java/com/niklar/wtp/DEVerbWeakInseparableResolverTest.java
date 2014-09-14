@@ -61,6 +61,21 @@ public class DEVerbWeakInseparableResolverTest {
         assertThat(wordFormToStrings(DEVerbWeakInseparableResolver.infinitives(antunProps)))
                 .isEqualTo(antunInfinitives);
     }
+    @Test
+    public void testExtendedInfinitives() {
+        Set<String> kennenInfinitives = Sets.newHashSet("kennen", "gekannt");
+        Set<String> seinInfinitives = Sets.newHashSet("sein", "gewesen");
+        Set<String> antunInfinitives = Sets.newHashSet("anzutun", "angetan");
+
+        assertThat(wordFormToStrings(DEVerbWeakInseparableResolver.extendedInfinitives(kennenProps)))
+                .isEqualTo(kennenInfinitives);
+        assertThat(wordFormToStrings(DEVerbWeakInseparableResolver.extendedInfinitives(seinProps)))
+                .isEqualTo(seinInfinitives);
+        assertThat(wordFormToStrings(DEVerbWeakInseparableResolver.extendedInfinitives(antunProps)))
+                .isEqualTo(antunInfinitives);
+    }
+
+
 
     private Set<String> wordFormToStrings(final Collection<WordForm> wordForms) {
         return wordForms.stream()

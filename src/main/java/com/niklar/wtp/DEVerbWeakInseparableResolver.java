@@ -13,13 +13,13 @@ import java.util.Properties;
 public class DEVerbWeakInseparableResolver {
     static Collection<WordForm> resolve(final String wiktiTemplate) {
         final Properties props = ParsingUtils.parseRule(wiktiTemplate, "Deutsch Verb unregelmäßig", 0);
-        final Collection<WordForm> conjugations = new ArrayList<WordForm>();
+        final Collection<WordForm> conjugations = new ArrayList<>();
 
         return conjugations;
     }
 
     public static Collection<WordForm> infinitives(final Properties props) {
-        final ArrayList<WordForm> infinitives = new ArrayList<WordForm>();
+        final ArrayList<WordForm> infinitives = new ArrayList<>();
         final String prefix = props.getProperty("1", "");
         // Infinitiv Präsens Aktiv
         infinitives.add(new WordForm(getBaseForm(props)));
@@ -30,23 +30,68 @@ public class DEVerbWeakInseparableResolver {
             infinitives.add(new WordForm(prefix + props.getProperty("Partizip+", "")));
         }
         //  Vorgangspassiv / Zusstandspassiv
-        String vp = props.getProperty("vp", "");
-        final String zp = props.getProperty("zp","");
+        final String vp = props.getProperty("vp", "");
+        final String zp = props.getProperty("zp", "");
         HashSet<String> vpZpYes = Sets.newHashSet("ja", "1", "sie_werden", "vp3", "zp3");
-        if (!"".equals(vp)){
-            if (vpZpYes.contains(vp)){
+        if (!"".equals(vp)) {
+            if (vpZpYes.contains(vp)) {
                 // Vorgangspassiv Infinitiv Präsens
-                infinitives.add(new WordForm(prefix+props.get("5")));
+                infinitives.add(new WordForm(prefix + props.get("5")));
                 // Vorgangspassiv Infinitiv Perfekt
-                infinitives.add(new WordForm(prefix+props.get("5")));
-            }
-            if (vpZpYes.contains(zp)){
-                // Zustandspassiv Infinitiv Präsens
-                infinitives.add(new WordForm(prefix+props.get("5")));
-                // Zustandspassiv Infinitiv Perfekt
-                infinitives.add(new WordForm(prefix+props.get("5")));
+                infinitives.add(new WordForm(prefix + props.get("5")));
             }
         }
+        if (vpZpYes.contains(zp)) {
+            // Zustandspassiv Infinitiv Präsens
+            infinitives.add(new WordForm(prefix + props.get("5")));
+            // Zustandspassiv Infinitiv Perfekt
+            infinitives.add(new WordForm(prefix + props.get("5")));
+        }
+        return infinitives;
+    }
+
+    public static Collection<WordForm> extendedInfinitives(final Properties props) {
+        final ArrayList<WordForm> infinitives = new ArrayList<>();
+        String prefix = props.getProperty("1", "");
+        String extPrefix = "";
+        if (!"".equals(prefix)) {
+            extPrefix = (!"".equals(props.getProperty("Wv"))) ? prefix + "zu" : prefix + "zu ";
+        }
+        // erweiterte Infinitiv Präsens Aktiv
+        String base;
+        if (!"".equals(props.getProperty("Infinitiv Präsens", ""))) {
+            base = props.getProperty("Infinitiv Präsens");
+        } else if (!"".equals(props.getProperty("10", ""))) {
+            base = props.getProperty("10");
+        } else {
+            base = props.getProperty("2") + "en";
+        }
+        infinitives.add(new WordForm(extPrefix + base));
+        // erweiterter Infinitiv Perfekt aktiv
+        infinitives.add(new WordForm(prefix + props.getProperty("5")));
+        if (!"".equals(props.getProperty("Partizip+", ""))) {
+            infinitives.add(new WordForm(prefix + props.getProperty("Partizip+")));
+        }
+
+        //  Vorgangspassiv / Zusstandspassiv
+        final String vp = props.getProperty("vp", "");
+        final String zp = props.getProperty("zp", "");
+        HashSet<String> vpZpYes = Sets.newHashSet("ja", "1", "sie_werden", "vp3", "zp3");
+        if (!"".equals(vp)) {
+            if (vpZpYes.contains(vp)) {
+                // Vorgangspassiv Infinitiv Präsens
+                infinitives.add(new WordForm(prefix + props.get("5")));
+                // Vorgangspassiv Infinitiv Perfekt
+                infinitives.add(new WordForm(prefix + props.get("5")));
+            }
+        }
+        if (vpZpYes.contains(zp)) {
+            // Zustandspassiv Infinitiv Präsens
+            infinitives.add(new WordForm(prefix + props.get("5")));
+            // Zustandspassiv Infinitiv Perfekt
+            infinitives.add(new WordForm(prefix + props.get("5")));
+        }
+
         return infinitives;
     }
 
